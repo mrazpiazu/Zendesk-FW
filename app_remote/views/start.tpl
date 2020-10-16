@@ -78,7 +78,13 @@
                     var app = data['ticket.customField:custom_field_360009089098'];
                     var ticket_attachments = [];
 
-                    if ((destination == 'Pame' || destination == 'Tallinja') && (destination.toLowerCase() != app)) {
+                    const dest_ext = [
+                        'Pame',
+                        'Tallinja',
+                        'Muving'
+                    ];
+
+                    if (dest_ext.includes(destination) && (destination.toLowerCase() != app)) {
                         updateApp('<b>App and Destination don\'t match</b>');
                         return;
                     }
