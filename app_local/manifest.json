@@ -1,0 +1,29 @@
+{
+  "name": "Zendesk FW",
+  "author": {
+    "name": "Fernando Azpiazu",
+    "email": "fgazpiazu@gmail.com",
+    "url": ""
+  },
+  "defaultLocale": "en",
+  "private": true,
+  "location": {
+    "support": {
+      "ticket_sidebar": "http://localhost:8080/sidebar"
+    }
+  },
+  "version": "1.0",
+  "frameworkVersion": "2.0",
+  "parameters": [
+    {
+      "name": "Zendesk Email",
+      "type": "text",
+      "secure": false
+    },
+    {
+      "name": "Zendesk Token",
+      "type": "password",
+      "secure": true
+    }
+  ]
+}
