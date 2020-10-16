@@ -14,8 +14,6 @@ start.tpl contains both the HTML and the JavaScript + jQuery code and can be upd
 
 This App requires a data.json file with the following format:
 
-{
-
     "zendesk": {
         "url": "https://ZENDESK-SUB-DOMAIN.zendesk.com/api/v2/tickets/",
         "user": "ZENDESK-USER-EMAIL",
@@ -38,5 +36,3 @@ This App requires a data.json file with the following format:
             "External Receiver 2":"example2@domain.com",
         }
     }    
-}
-
