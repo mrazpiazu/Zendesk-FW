@@ -7,20 +7,6 @@
     <br>
     <div id='app_div'>
         <div id='buttons'>
-            <button class="btn btn-default btn-block" onclick="validateSend('Test');">FW to TEST</button>
-            <br>
-            <button class="btn btn-default btn-block" onclick="validateSend('ProductOwner');">FW to Product Owner</button>
-            <br>
-            <button class="btn btn-default btn-block" onclick="validateSend('CTO');">FW to CTO</button>
-            <br>
-            <button class="btn btn-default btn-block" onclick="validateSend('IT');">FW to IT</button>
-            <br>
-            <button class="btn btn-default btn-block" onclick="validateSend('Tallinja');">FW to Tallinja</button>
-            <br>
-            <button id="cpt_button" class="btn btn-default btn-block" onclick="validateSend('Pame');">FW to Pame</button>
-            <br>
-            <button class="btn btn-default btn-block" onclick="validateSend('Muving');">FW to Muving</button>
-            <br>
         </div>
     </div>
     <script src="https://static.zdassets.com/zendesk_app_framework_sdk/2.0/zaf_sdk.min.js"></script>
@@ -31,7 +17,7 @@
         var client = ZAFClient.init();
         client.invoke('resize', { width: '100%', height: '380px' });
 
-        //createButtons()
+        createButtons()
 
         function createButtons() {
             const destinations_list = [
@@ -57,8 +43,7 @@
             for (var i = 0; i < destinations_list.length; i++) {
                 for (destination in destinations_list[i]) {
                     for (var x = 0; x < destinations_list[i][destination].length; x++) {
-                        dest = destinations_list[i][destination][x];
-                        console.log(dest)
+                        let dest = destinations_list[i][destination][x];
                         button = document.createElement("button");
                         button.setAttribute('class', 'btn btn-default btn-block');
                         button.innerHTML = "FW to "+dest;
