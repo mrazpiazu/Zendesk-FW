@@ -54,7 +54,7 @@
                 }
             }
 
-            const destinations_list2 = {
+            const destinations_list2 = [
                 {
                     'type': 'ext',
                     'dest': 'Pame'
@@ -83,7 +83,7 @@
                     'type': 'int',
                     'dest': 'IT'
                 },
-            }
+            ]
 
             for (let destination of destinations_list2) {
                 console.log(destination)
