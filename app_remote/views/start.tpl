@@ -25,15 +25,15 @@
 
             const destinations_list = [
                 {
-                    'type': 'external',
+                    'type': 'apps',
                     'dest': 'Pame'
                 },
                 {
-                    'type': 'external',
+                    'type': 'apps',
                     'dest': 'Tallinja'
                 },
                 {
-                    'type': 'external',
+                    'type': 'operators',
                     'dest': 'Muving'
                 },
                 {
@@ -42,7 +42,7 @@
                 },
                 {
                     'type': 'internal',
-                    'dest': 'ProductOwner'
+                    'dest': 'Product Owner'
                 },
                 {
                     'type': 'internal',
@@ -99,7 +99,7 @@
                 button.innerHTML = "FW to "+dest;
                 button.addEventListener("click", function(event) {
                     event.stopPropagation();
-                    validateSend(dest, type) 
+                    validateSend(dest, type);
                 });
                 
                 type_div.appendChild(button);
@@ -172,13 +172,7 @@
                     var app = data['ticket.customField:custom_field_360009089098'];
                     var ticket_attachments = [];
 
-                    const dest_ext = [
-                        'Pame',
-                        'Tallinja',
-                        'Muving'
-                    ];
-
-                    if (dest_ext.includes(destination) && (destination.toLowerCase() != app)) {
+                    if (type == 'apps' && (destination.toLowerCase() != app)) {
                         updateApp('<b>App and Destination don\'t match</b>', type);
                         return;
                     }
