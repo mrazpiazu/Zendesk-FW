@@ -150,7 +150,16 @@
 
             $("body").css("cursor", "progress");
 
-            client.get(['ticket.id', 'ticket.status', 'ticket.tags','ticket.subject', 'ticket.description', 'ticket.requester', 'ticket.comments', 'ticket.customField:custom_field_360009064098', 'ticket.customField:custom_field_360009089098']).then(
+            client.get([
+                'ticket.id',
+                'ticket.status', 
+                'ticket.tags', 
+                'ticket.subject', 
+                'ticket.description',
+                'ticket.requester',
+                'ticket.comments',
+                'ticket.customField:custom_field_360009064098',
+                'ticket.customField:custom_field_360009089098']).then(
                 function(data) {
                     var ticket_title = data['ticket.subject'].replace(/(\r\n|\n|\r)/gm, "");
                     var ticket_id = data['ticket.id'];
