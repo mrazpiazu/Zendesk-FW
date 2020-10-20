@@ -40,7 +40,6 @@ def send_mail():
     app = request.query.app
     category = request.query.category
 
-    
     with open('data.json') as json_file:
         data = json.load(json_file)
     

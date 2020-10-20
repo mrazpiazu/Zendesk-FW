@@ -1,6 +1,5 @@
 <head>
     <meta charset="utf-8">
-    <meta name="google-signin-client_id" content="574214751214-trvmfkioqrf9f85a6vmbg956tkh44i98.apps.googleusercontent.com">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/combine/npm/@zendeskgarden/css-bedrock@7.0.21,npm/@zendeskgarden/css-utilities@4.3.0">
     <link href="https://cdn.jsdelivr.net/bootstrap/3.3.6/css/bootstrap.min.css" rel="stylesheet">
 </head>
@@ -8,19 +7,19 @@
     <br>
     <div id='app_div'>
         <div id='buttons'>
-            <button id="cpt_button" class="btn btn-default btn-block" onclick="validateSend('Test');">FW to TEST</button>
+            <button class="btn btn-default btn-block" onclick="validateSend('Test');">FW to TEST</button>
             <br>
-            <button id="cpt_button" class="btn btn-default btn-block" onclick="validateSend('ProductOwner');">FW to Product Owner</button>
+            <button class="btn btn-default btn-block" onclick="validateSend('ProductOwner');">FW to Product Owner</button>
             <br>
-            <button id="cpt_button" class="btn btn-default btn-block" onclick="validateSend('CTO');">FW to CTO</button>
+            <button class="btn btn-default btn-block" onclick="validateSend('CTO');">FW to CTO</button>
             <br>
-            <button id="cpt_button" class="btn btn-default btn-block" onclick="validateSend('IT');">FW to IT</button>
+            <button class="btn btn-default btn-block" onclick="validateSend('IT');">FW to IT</button>
             <br>
-            <button id="cpt_button" class="btn btn-default btn-block" onclick="validateSend('Tallinja');">FW to Tallinja</button>
+            <button class="btn btn-default btn-block" onclick="validateSend('Tallinja');">FW to Tallinja</button>
             <br>
             <button id="cpt_button" class="btn btn-default btn-block" onclick="validateSend('Pame');">FW to Pame</button>
             <br>
-            <button id="cpt_button" class="btn btn-default btn-block" onclick="validateSend('Muving');">FW to Muving</button>
+            <button class="btn btn-default btn-block" onclick="validateSend('Muving');">FW to Muving</button>
             <br>
         </div>
     </div>
@@ -31,6 +30,44 @@
     <script type=text/javascript>
         var client = ZAFClient.init();
         client.invoke('resize', { width: '100%', height: '380px' });
+
+        //createButtons()
+
+        function createButtons() {
+            const destinations_list = [
+                {
+                    "dest_ext": [
+                        "Pame",
+                        "Tallinja",
+                        "Muving"
+                    ]
+                },
+                {
+                    "dest_in": [
+                        "Test",
+                        "ProductOwner",
+                        "CTO",
+                        "IT"
+                    ]
+                }
+            ]
+
+            var buttons_div = document.getElementById('buttons');
+
+            for (var i = 0; i < destinations_list.length; i++) {
+                for (destination in destinations_list[i]) {
+                    for (var x = 0; x < destinations_list[i][destination].length; x++) {
+                        dest = destinations_list[i][destination][x];
+                        console.log(dest)
+                        button = document.createElement("button");
+                        button.setAttribute('class', 'btn btn-default btn-block');
+                        button.innerHTML = "FW to "+dest;
+                        button.addEventListener("click", function() { validateSend(dest) });
+                        buttons_div.appendChild(button);
+                    }
+                }
+            }
+        }
 
         function validateSend(destination) {
             var app_div = document.getElementById('app_div');
