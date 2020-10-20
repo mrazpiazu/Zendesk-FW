@@ -20,6 +20,7 @@
         createButtons()
 
         function createButtons() {
+
             const destinations_list = [
                 {
                     "dest_ext": [
@@ -50,6 +51,12 @@
                         button.addEventListener("click", function() { validateSend(dest) });
                         buttons_div.appendChild(button);
                     }
+                }
+            }
+
+            for (let destination_type of destinations_list) {
+                for (let destination in destination_type) {
+                    console.log(destination_type[destination]);
                 }
             }
         }
