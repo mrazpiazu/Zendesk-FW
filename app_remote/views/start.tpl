@@ -21,96 +21,122 @@
 
         function createButtons() {
 
-            const destinations_list = [
-                {
-                    "dest_ext": [
-                        "Pame",
-                        "Tallinja",
-                        "Muving"
-                    ]
-                },
-                {
-                    "dest_in": [
-                        "Test",
-                        "ProductOwner",
-                        "CTO",
-                        "IT"
-                    ]
-                }
-            ]
-
             var buttons_div = document.getElementById('buttons');
 
-            for (var i = 0; i < destinations_list.length; i++) {
-                for (destination in destinations_list[i]) {
-                    for (var x = 0; x < destinations_list[i][destination].length; x++) {
-                        let dest = destinations_list[i][destination][x];
-                        button = document.createElement("button");
-                        button.setAttribute('class', 'btn btn-default btn-block');
-                        button.innerHTML = "FW to "+dest;
-                        button.addEventListener("click", function() { validateSend(dest) });
-                        buttons_div.appendChild(button);
-                    }
-                }
-            }
-
-            const destinations_list2 = [
+            const destinations_list = [
                 {
-                    'type': 'ext',
+                    'type': 'external',
                     'dest': 'Pame'
                 },
                 {
-                    'type': 'ext',
+                    'type': 'external',
                     'dest': 'Tallinja'
                 },
                 {
-                    'type': 'ext',
+                    'type': 'external',
                     'dest': 'Muving'
                 },
                 {
-                    'type': 'int',
+                    'type': 'internal',
                     'dest': 'Test'
                 },
                 {
-                    'type': 'int',
+                    'type': 'internal',
                     'dest': 'ProductOwner'
                 },
                 {
-                    'type': 'int',
+                    'type': 'internal',
                     'dest': 'CTO'
                 },
                 {
-                    'type': 'int',
+                    'type': 'internal',
                     'dest': 'IT'
                 },
-            ]
+            ];
 
-            for (let destination of destinations_list2) {
-                console.log(destination)
+            var dest_types = [];
+
+            for (let destination of destinations_list) {
+                let type = destination.type;
+
+                if (!dest_types.includes(type)) {
+                    dest_types.push(type);
+                }
+            }
+
+            for (let type of dest_types) {
+                let type_div = document.createElement("div");
+                type_div.setAttribute("id", type);
+                type_div.style.display = "none";
+
+                let type_button = document.createElement("button");
+                type_button.setAttribute("id", type+"_button");
+                type_button.setAttribute('class', 'btn btn-default btn-block');
+                type_button.innerHTML = type.charAt(0).toUpperCase() + type.slice(1);
+                type_button.addEventListener("click", function() {
+                    if (type_div.style.display == "none") {
+                        type_div.style.display = "block";
+                    }
+
+                    else {
+                        type_div.style.display = "none";
+                    }
+                });
+
+                type_button.appendChild(type_div);
+                buttons_div.appendChild(type_button);
+            }
+
+            for (let destination of destinations_list) {
+                let dest = destination.dest;
+                let type = destination.type;
+
+                let type_div = document.getElementById(type);
+
+                let button = document.createElement("button");
+                button.setAttribute('class', 'btn btn-default btn-block');
+                button.setAttribute("id", type+'_'+dest);
+                button.innerHTML = "FW to "+dest;
+                button.addEventListener("click", function(event) {
+                    event.stopPropagation();
+                    validateSend(dest, type) 
+                });
+                
+                type_div.appendChild(button);
             }
         }
 
-        function validateSend(destination) {
+        function validateSend(destination, type) {
             var app_div = document.getElementById('app_div');
+            var button = document.getElementById(type+'_'+destination);
+            var button_div = document.getElementById(type);
+            button_div.style.display = 'block';
 
-            var text_box = document.createElement("INPUT");
-            text_box.setAttribute('id', 'text_box');
-            text_box.setAttribute("type", "text");
+            if (!document.getElementById(destination+'_text_box')) {
+                var linebreak = document.createElement('br');
+                var text_box = document.createElement("input");
+                text_box.setAttribute('id', destination+'_text_box');
+                text_box.setAttribute("type", "text");
 
-            var buttons_div = document.getElementById('buttons');
-            buttons_div.remove();
+                var text_button = document.createElement("button");
+                text_button.setAttribute('id', destination+'_text_button');
+                text_button.setAttribute('class', 'btn btn-default btn-block');
+                text_button.innerHTML = 'Confirm Destination: '+destination
 
-            var text_button = document.createElement("button");
-            text_button.setAttribute('id', 'text_button');
-            text_button.setAttribute('class', 'btn btn-default btn-block');
-            text_button.innerHTML = 'Confirm Destination: '+destination;
+                button.appendChild(linebreak);
+            }
 
-            app_div.appendChild(text_box);
-            app_div.appendChild(text_button);
+            else {
+                var text_box = document.getElementById(destination+'_text_box');
+                var text_button = document.getElementById(destination+'_text_button');
+            }
+
+            button.appendChild(text_box);
+            button.appendChild(text_button);
 
             text_button.onclick = function() {
                 if (text_box.value == destination) {
-                    sendEmail(destination);
+                    sendEmail(destination, type);
                 }
 
                 else {
@@ -119,7 +145,7 @@
             }
         }
 
-        function sendEmail(destination) {
+        function sendEmail(destination, type) {
 
             $("body").css("cursor", "progress");
 
@@ -143,7 +169,7 @@
                     ];
 
                     if (dest_ext.includes(destination) && (destination.toLowerCase() != app)) {
-                        updateApp('<b>App and Destination don\'t match</b>');
+                        updateApp('<b>App and Destination don\'t match</b>', type);
                         return;
                     }
 
@@ -182,18 +208,18 @@
                     }
 
                     if (category != null) {
-                        ajaxCall(data);
+                        ajaxCall(data, destination, type);
                     }
 
                     else {
                         $("body").css("cursor", "default");
-                        updateApp('<b>A Category needs to be selected before forwarding an email');
+                        updateApp('<b>A Category needs to be selected before forwarding an email', destination, type);
                     }
                 }
             );
         }
 
-        function ajaxCall(data) {
+        function ajaxCall(data, destination, type) {
             $.ajax({
             method: 'GET',
             url: 'mail',
@@ -202,19 +228,19 @@
                 $("body").css("cursor", "default");
 
                 if (response) {
-                    updateApp(response);
+                    updateApp(response, destination, type);
                 }
             }
             });
         }
 
-        function updateApp(text) {
-            var text_box = document.getElementById('text_box');
-            var text_button = document.getElementById('text_button');
+        function updateApp(text, destination, type) {
+            var text_box = document.getElementById(destination+'_text_box');
+            var text_button = document.getElementById(destination+'_text_button');
             text_box.remove();
             text_button.remove();
 
-            document.getElementById('app_div');
+            app_div = document.getElementById('app_div');
             app_div.innerHTML = text;
 
             var refresh_button = document.createElement('button');
