@@ -173,7 +173,7 @@
                     var ticket_attachments = [];
 
                     if (type == 'apps' && (destination.toLowerCase() != app)) {
-                        updateApp('<b>App and Destination don\'t match</b>', type);
+                        updateApp('<b>App and Destination don\'t match</b>', destination, type);
                         return;
                     }
 
