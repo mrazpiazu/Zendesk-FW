@@ -38,7 +38,7 @@ def send_mail():
     description = request.query.description
     full_description = request.query.full_description
     app = request.query.app
-    category = request.query.category
+    zendesk_category_name_app = request.query.category
 
     with open('data.json') as json_file:
         data = json.load(json_file)
@@ -46,6 +46,8 @@ def send_mail():
     zendesk_url = data['zendesk']['url']
     zendesk_user = data['zendesk']['user']
     zendesk_token = data['zendesk']['token']
+    zendesk_category_id_app = data['zendesk']['categories']['app']
+    new_tags = data['zendesk']['new_tags']
 
     aws_access_key = data['aws']['key']
     aws_access_key_secret = data['aws']['secret']
@@ -57,9 +59,10 @@ def send_mail():
     dest_ext = data['email']['dest_ext']
     dest_in = data['email']['dest_in']
 
+    signature = data['email']['signature']
 
     if destination in dest_ext:
-        description = '<b>Please contact the client below to address this issue.</b><br /><br />' + description + '<br /><br /><b>Meep Support</b>'
+        description = '<b>Please contact the client below to address this issue.</b><br /><br />' + description + '<br /><br /><b>'+signature+'</b>'
         title = '['+destination+' Support]: '+title
         dest = dest_ext
 
@@ -85,12 +88,8 @@ def send_mail():
     else:
         pass
 
-
-    new_tags = [
-        'sent'+destination.lower(),
-        'batch_update',
-        'no_csat'
-    ]
+    
+    new_tags.append('sent'+destination.lower())
 
     for tag in new_tags:
         if tag not in tags:
@@ -100,8 +99,8 @@ def send_mail():
         'ticket': {
             "custom_fields": [
                 {
-                    "id": '360009064098', 
-                    "value": category
+                    "id": zendesk_category_id_app, 
+                    "value": zendesk_category_name_app
                 }
             ],
             'tags': tags,
@@ -162,8 +161,8 @@ def send_mail():
                 'ticket': {
                     "custom_fields": [
                         {
-                            "id": '360009064098', 
-                            "value": category
+                            "id": zendesk_category_id_app, 
+                            "value": zendesk_category_name_app
                         }
                     ],
                     'tags': tags,
@@ -184,8 +183,8 @@ def send_mail():
                 'ticket': {
                     "custom_fields": [
                         {
-                            "id": '360009064098',
-                            "value": category
+                            "id": zendesk_category_id_app,
+                            "value": zendesk_category_name_app
                         }
                     ],
                     'tags': tags,
