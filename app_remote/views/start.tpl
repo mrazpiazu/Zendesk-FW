@@ -133,6 +133,7 @@
 
             button.appendChild(text_box);
             button.appendChild(text_button);
+            text_box.focus();
 
             text_button.onclick = function() {
                 if (text_box.value == destination) {
