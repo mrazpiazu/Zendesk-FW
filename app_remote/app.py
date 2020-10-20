@@ -156,6 +156,7 @@ def send_mail():
         return '<b>An error has occurred</b> during the <b>Forward</b> process of this ticket.<br /><br /><b>Response: </b>'+e.response['Error']['Message']
 
     else:
+
         if (destination in dest_ext) and (dest[destination] != admin):
             data = {
                 'ticket': {

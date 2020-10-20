@@ -96,7 +96,7 @@
                 let button = document.createElement("button");
                 button.setAttribute('class', 'btn btn-default btn-block');
                 button.setAttribute("id", type+'_'+dest);
-                button.innerHTML = "FW to "+dest;
+                button.innerHTML = dest;
                 button.addEventListener("click", function(event) {
                     event.stopPropagation();
                     validateSend(dest, type);
