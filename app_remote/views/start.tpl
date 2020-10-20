@@ -54,10 +54,39 @@
                 }
             }
 
-            for (let destination_type of destinations_list) {
-                for (let destination in destination_type) {
-                    console.log(destination_type[destination]);
-                }
+            const destinations_list2 = {
+                {
+                    'type': 'ext',
+                    'dest': 'Pame'
+                },
+                {
+                    'type': 'ext',
+                    'dest': 'Tallinja'
+                },
+                {
+                    'type': 'ext',
+                    'dest': 'Muving'
+                },
+                {
+                    'type': 'int',
+                    'dest': 'Test'
+                },
+                {
+                    'type': 'int',
+                    'dest': 'ProductOwner'
+                },
+                {
+                    'type': 'int',
+                    'dest': 'CTO'
+                },
+                {
+                    'type': 'int',
+                    'dest': 'IT'
+                },
+            }
+
+            for (let destination of destinations_list2) {
+                console.log(destination)
             }
         }
 
