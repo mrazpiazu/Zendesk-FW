@@ -97,6 +97,9 @@
 
                 let type_div = document.getElementById(type);
 
+                let dest_div = document.createElement('div');
+                dest_div.setAttribute('id', dest.replace(' ', '_')+'_div');
+
                 let button = document.createElement("button");
                 button.setAttribute('class', 'btn btn-default btn-block');
                 button.setAttribute("id", type+'_'+dest);
@@ -106,7 +109,8 @@
                     validateSend(dest, type);
                 });
                 
-                type_div.appendChild(button);
+                dest_div.appendChild(button);
+                type_div.appendChild(dest_div);
             }
         }
 
@@ -251,17 +255,17 @@
             if (document.getElementById(destination.replace(' ', '_')+'_text_box')) {
                 var text_box = document.getElementById(destination.replace(' ', '_')+'_text_box');
                 var text_button = document.getElementById(destination.replace(' ', '_')+'_text_button');
+                var app_div = document.getElementById(destination+'_div');
             }
 
             else {
                 var text_box = document.getElementById('Enter_email_text_box');
                 var text_button = document.getElementById('Enter_email_text_button');
+                app_div = document.getElementById('Enter_email_div');
             }
 
             text_box.remove();
             text_button.remove();
-
-            app_div = document.getElementById('app_div');
             app_div.innerHTML = text;
 
             var refresh_button = document.createElement('button');
