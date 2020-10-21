@@ -13,7 +13,7 @@ There are two folders in this rep:
 
 app_remote/views/start.tpl contains both the HTML and the JavaScript + jQuery code and can be updated from server side.
 
-This App requires a data.json file with the following format:
+This App requires a data.json file placed in app_remote with the following format:
 
     "zendesk": {
         "url": "https://ZENDESK-SUB-DOMAIN.zendesk.com/api/v2/tickets/",
@@ -44,3 +44,9 @@ This App requires a data.json file with the following format:
             "External Receiver 2":"example2@domain.com",
         }
     }    
+
+The App will require to modify the destinations_list array of objects in start.tpl with the desired destinations and types. These destinations should match with data.json's data['email'] "dest_in" or "dest_ext" receivers' names.
+
+The App will require to modify the array passed through client.get() in function sendEmail() and the object data that is passed through ajax in start.tpl, to customize or remove the custom fields that are being used on this code.
+
+Future updates will make these changes more efficient and scalable.
