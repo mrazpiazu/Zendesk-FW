@@ -97,7 +97,7 @@ def send_mail():
         pass
 
     
-    new_tags.append('sent'+destination.lower())
+    new_tags.append('sent_'+destination.lower().replace(' ', '_'))
 
     for tag in new_tags:
         if tag not in tags:
