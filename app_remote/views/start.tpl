@@ -234,16 +234,16 @@
 
         function ajaxCall(data, destination, type) {
             $.ajax({
-            method: 'GET',
-            url: 'mail',
-            data: data,
-            success: function(response) {
-                $("body").css("cursor", "default");
+                method: 'GET',
+                url: 'mail',
+                data: data,
+                success: function(response) {
+                    $("body").css("cursor", "default");
 
-                if (response) {
-                    updateApp(response, destination, type);
+                    if (response) {
+                        updateApp(response, destination, type);
+                    }
                 }
-            }
             });
         }
 
