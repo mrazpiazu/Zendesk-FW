@@ -183,7 +183,7 @@ def send_mail():
             response = update_ticket(data, tid)
 
             if response == True:
-                return 'Ticket successfully forwarded to <b>'+dest[destination]+'</b>'
+                return 'Ticket successfully forwarded to <br /><b>'+dest[destination]+'</b>'
 
             else:
                 return response
@@ -209,7 +209,7 @@ def send_mail():
                     return 'Email FW was <b>successfully tested</b>'
 
                 elif dest[destination] != admin:
-                    return 'Email was succesfully forwarded to <b>'+dest[destination]+'</b>'
+                    return 'Email was succesfully forwarded to <br /><b>'+dest[destination]+'</b>'
 
             else:
                 return response
