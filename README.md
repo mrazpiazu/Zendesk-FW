@@ -45,6 +45,8 @@ This App requires a data.json file placed in app_remote with the following forma
         }
     }    
 
+The App will require to modify app_local/manifest.json as of data["location"]["support"]["ticket_sidebar"] to include server's URL/IP, before compiling app_local and uploading it to Zendesk.
+
 The App will require to modify the destinations_list array of objects in start.tpl with the desired destinations and types. These destinations should match with data.json's data['email'] "dest_in" or "dest_ext" receivers' names.
 
 The App will require to modify the array passed through client.get() in function sendEmail() and the object data that is passed through ajax in start.tpl, to customize or remove the custom fields that are being used on this code.
