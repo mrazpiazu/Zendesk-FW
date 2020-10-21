@@ -52,6 +52,10 @@
                     'type': 'internal',
                     'dest': 'IT'
                 },
+                {
+                    'type': 'other',
+                    'dest': 'Enter email'
+                }
             ];
 
             var dest_types = [];
@@ -112,14 +116,14 @@
             var button_div = document.getElementById(type);
             button_div.style.display = 'block';
 
-            if (!document.getElementById(destination+'_text_box')) {
+            if (!document.getElementById(destination.replace(' ', '_')+'_text_box')) {
                 var linebreak = document.createElement('br');
                 var text_box = document.createElement("input");
-                text_box.setAttribute('id', destination+'_text_box');
+                text_box.setAttribute('id', destination.replace(' ', '_')+'_text_box');
                 text_box.setAttribute("type", "text");
 
                 var text_button = document.createElement("button");
-                text_button.setAttribute('id', destination+'_text_button');
+                text_button.setAttribute('id', destination.replace(' ', '_')+'_text_button');
                 text_button.setAttribute('class', 'btn btn-default btn-block');
                 text_button.innerHTML = 'Confirm Destination: '+destination
 
@@ -127,8 +131,8 @@
             }
 
             else {
-                var text_box = document.getElementById(destination+'_text_box');
-                var text_button = document.getElementById(destination+'_text_button');
+                var text_box = document.getElementById(destination.replace(' ', '_')+'_text_box');
+                var text_button = document.getElementById(destination.replace(' ', '_')+'_text_button');
             }
 
             button.appendChild(text_box);
@@ -136,8 +140,12 @@
             text_box.focus();
 
             text_button.onclick = function() {
-                if (text_box.value == destination) {
+                if (type != 'other' && text_box.value == destination) {
                     sendEmail(destination, type);
+                }
+
+                else if (type == 'other') {
+                    sendEmail(text_box.value, type);
                 }
 
                 else {
@@ -199,6 +207,7 @@
 
                     var data = {
                         destination: destination,
+                        dest_type: type,
                         id: ticket_id,
                         status: ticket_status,
                         tags: ticket_tags,
@@ -239,8 +248,16 @@
         }
 
         function updateApp(text, destination, type) {
-            var text_box = document.getElementById(destination+'_text_box');
-            var text_button = document.getElementById(destination+'_text_button');
+            if (document.getElementById(destination.replace(' ', '_')+'_text_box')) {
+                var text_box = document.getElementById(destination.replace(' ', '_')+'_text_box');
+                var text_button = document.getElementById(destination.replace(' ', '_')+'_text_button');
+            }
+
+            else {
+                var text_box = document.getElementById('Enter_email_text_box');
+                var text_button = document.getElementById('Enter_email_text_button');
+            }
+
             text_box.remove();
             text_button.remove();
 

@@ -33,6 +33,7 @@ def send_mail():
     status = request.query.status
     tid = request.query.id
     destination = request.query.destination
+    dest_type = request.query.type
     title = request.query.title
     requester = request.query.requester
     description = request.query.description
@@ -70,6 +71,13 @@ def send_mail():
         title = '[Zendesk Report - '+app.capitalize()+']: '+title
         requester = admin
         description = full_description
+        dest = dest_in
+
+    else:
+        title = '[Zendesk Report - '+app.capitalize()+']: '+title
+        requester = admin
+        description = full_description
+        dest_in[destination] = destination
         dest = dest_in
 
 
@@ -120,6 +128,7 @@ def send_mail():
 
     client = boto3.client('ses', aws_access_key_id = aws_access_key, aws_secret_access_key = aws_access_key_secret, region_name = AWS_REGION)
 
+
     try:
         response = client.send_email(
             Destination = {
@@ -162,7 +171,7 @@ def send_mail():
                 'ticket': {
                     "custom_fields": [
                         {
-                            "id": zendesk_category_id_app, 
+                            "id": zendesk_category_id_app,
                             "value": zendesk_category_name_app
                         }
                     ],
