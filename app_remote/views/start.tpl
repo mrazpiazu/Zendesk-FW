@@ -162,16 +162,32 @@
 
             $("body").css("cursor", "progress");
 
-            client.get([
+            let custom_fields = [
+                {
+                    "name": "category",
+                    "id": "360009064098"
+                },
+                {
+                    "name": "app",
+                    "id": "360009089098"
+                }
+            ]
+
+            get_list = [
                 'ticket.id',
                 'ticket.status', 
                 'ticket.tags', 
                 'ticket.subject', 
                 'ticket.description',
                 'ticket.requester',
-                'ticket.comments',
-                'ticket.customField:custom_field_360009064098',
-                'ticket.customField:custom_field_360009089098']).then(
+                'ticket.comments'
+            ];
+
+            for (field of custom_fields) {
+                get_list.push('ticket.customField:custom_field_'+field.id);
+            }
+
+            client.get(get_list).then(
                 function(data) {
                     var ticket_title = data['ticket.subject'].replace(/(\r\n|\n|\r)/gm, "");
                     var ticket_id = data['ticket.id'];
@@ -180,9 +196,15 @@
                     var ticket_requester = data['ticket.requester'].email;
                     var ticket_description = data['ticket.description'].split('Reported')[0];
                     var ticket_full_description = data['ticket.description'].replace(/\n/g, "<br />")
-                    var category = data['ticket.customField:custom_field_360009064098'];
-                    var app = data['ticket.customField:custom_field_360009089098'];
                     var ticket_attachments = [];
+
+                    for (field of custom_fields) {
+                        field.value = data['ticket.customField\:custom_field_'+field.id]
+
+                        if (field.name == 'category') {
+                            var category = field.name;
+                        }
+                    }
 
                     if (type == 'apps' && (destination.toLowerCase() != app)) {
                         updateApp('<b>App and Destination don\'t match</b>', destination, type);
@@ -219,12 +241,11 @@
                         requester: ticket_requester,
                         description: ticket_description,
                         full_description: ticket_full_description,
-                        category: category,
-                        app: app,
-                        attachments: ticket_attachments
+                        attachments: ticket_attachments,
+                        custom_fields: JSON.stringify(custom_fields)
                     }
 
-                    if (category != null) {
+                    if (category) {
                         ajaxCall(data, destination, type);
                     }
 
@@ -245,6 +266,7 @@
                     $("body").css("cursor", "default");
 
                     if (response) {
+                        console.log(response);
                         updateApp(response, destination, type);
                     }
                 }

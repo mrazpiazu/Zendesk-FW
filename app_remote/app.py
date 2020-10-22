@@ -1,6 +1,7 @@
 import json
 import requests
 import boto3
+import ast
 from botocore.exceptions import ClientError
 from bottle import route, run, template, request
 
@@ -30,6 +31,7 @@ def send_mail():
 
     tags = request.query.getlist('tags[]')
     attachments = request.query.getlist('attachments[]')
+    custom_fields = request.query.getlist('custom_fields')
     status = request.query.status
     tid = request.query.id
     destination = request.query.destination
@@ -41,13 +43,14 @@ def send_mail():
     app = request.query.app
     zendesk_category_name_app = request.query.category
 
+    custom_fields = ast.literal_eval(custom_fields[0])
+
     with open('data.json') as json_file:
         data = json.load(json_file)
     
     zendesk_url = data['zendesk']['url']
     zendesk_user = data['zendesk']['user']
     zendesk_token = data['zendesk']['token']
-    zendesk_category_id_app = data['zendesk']['categories']['app']
     new_tags = data['zendesk']['new_tags']
 
     aws_access_key = data['aws']['key']
@@ -103,18 +106,26 @@ def send_mail():
         if tag not in tags:
             tags.append(tag)
 
+
+    update_fields = []
+
+    for field in custom_fields:
+        print(field["id"])
+        update_fields.append(
+            {
+                "id":field["id"],
+                "value":field["value"]
+            }
+        )
+
+
     data = {
         'ticket': {
-            "custom_fields": [
-                {
-                    "id": zendesk_category_id_app, 
-                    "value": zendesk_category_name_app
-                }
-            ],
+            "custom_fields": update_fields,
             'tags': tags,
-            'status': 'solved'
         }
     }
+
 
     SENDER = sender
     RECIPIENT = dest[destination]
@@ -167,18 +178,7 @@ def send_mail():
     else:
 
         if (destination in dest_ext) and (dest[destination] != admin):
-            data = {
-                'ticket': {
-                    "custom_fields": [
-                        {
-                            "id": zendesk_category_id_app,
-                            "value": zendesk_category_name_app
-                        }
-                    ],
-                    'tags': tags,
-                    'status': 'solved'
-                }
-            }
+            data['ticket']['status'] = 'solved'
            
             response = update_ticket(data, tid)
 
@@ -189,17 +189,6 @@ def send_mail():
                 return response
 
         elif (destination in dest_in) or (destination == 'Test'):
-            data = {
-                'ticket': {
-                    "custom_fields": [
-                        {
-                            "id": zendesk_category_id_app,
-                            "value": zendesk_category_name_app
-                        }
-                    ],
-                    'tags': tags,
-                }
-            }
 
             response = update_ticket(data, tid)
 
