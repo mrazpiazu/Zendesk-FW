@@ -206,6 +206,10 @@
                         if (field.name == 'category') {
                             var category = field.name;
                         }
+
+                        if (field.name == 'app') {
+                            var app = field.value;
+                        }
                     }
 
                     if (type == 'apps' && (destination.toLowerCase() != app)) {
