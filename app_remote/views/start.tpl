@@ -160,6 +160,8 @@
 
         function sendEmail(destination, type) {
 
+            instabug_integration = true;
+
             $("body").css("cursor", "progress");
 
             let custom_fields = [
@@ -194,7 +196,7 @@
                     var ticket_status = data['ticket.status'];
                     var ticket_tags = data['ticket.tags'];
                     var ticket_requester = data['ticket.requester'].email;
-                    var ticket_description = data['ticket.description'].split('Reported')[0];
+                    var ticket_description = data['ticket.description'];
                     var ticket_full_description = data['ticket.description'].replace(/\n/g, "<br />")
                     var ticket_attachments = [];
 
@@ -217,16 +219,14 @@
                         }
                     }
 
-                    if (data['ticket.description'].indexOf("**Non Image Attachments:**") != '-1') {
-                        other_attachment = data['ticket.description'].split('mp4](')[1];
-                        other_attachment = other_attachment.slice(0, -2);
-                        ticket_attachments.push(other_attachment);
+                    if (instabug_integration == true) {
+                        if (instabugFormat(data['ticket.description'], "attachment") != false) {
+                            ticket_attachments.push(instabugFormat(data['ticket.description'], "attachment"));
+                        }
+                        
+                        ticket_description = instabugFormat(data['ticket.description'], "description");
                     }
 
-                    if (ticket_description.split(' ')[0] == 'Title:	') {
-                        ticket_description = ticket_description.split('Title:	')[1];
-                    }
-                    
                     ticket_description = "<b>Requester Email: </b>" + ticket_requester + "<br /><br ><b>Previous communication as below:</b><br /><br />" + ticket_description;
 
                     ticket_description = ticket_description.replace(/\n/g, "<br />");
@@ -271,6 +271,24 @@
                     }
                 }
             });
+        }
+
+        function instabugFormat(data, type) {
+            if (type == "attachment") {
+                if (data.indexOf("**Non Image Attachments:**") != '-1') {
+                    attachment = data.split('mp4](')[1];
+                    return attachment.slice(0, -2);
+                }
+
+                else {
+                    return false;
+                }
+            }
+
+            else if (type == "description") {
+                ticket_description = data.split('Reported')[0];
+                return ticket_description.split('Title:	')[1];
+            }
         }
 
         function updateApp(text, destination, type) {

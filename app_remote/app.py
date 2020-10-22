@@ -41,9 +41,20 @@ def send_mail():
     description = request.query.description
     full_description = request.query.full_description
     app = request.query.app
-    zendesk_category_name_app = request.query.category
 
     custom_fields = ast.literal_eval(custom_fields[0])
+    update_fields = []
+
+    for field in custom_fields:
+        update_fields.append(
+            {
+                "id":field["id"],
+                "value":field["value"]
+            }
+        )
+
+        if field["name"] == "app":
+            app = field["value"]
 
     with open('data.json') as json_file:
         data = json.load(json_file)
@@ -105,18 +116,6 @@ def send_mail():
     for tag in new_tags:
         if tag not in tags:
             tags.append(tag)
-
-
-    update_fields = []
-
-    for field in custom_fields:
-        print(field["id"])
-        update_fields.append(
-            {
-                "id":field["id"],
-                "value":field["value"]
-            }
-        )
 
 
     data = {
